@@ -2,17 +2,27 @@
 
 namespace kway
 {
-    int* kway::KWaySort::KSortAlgo(int* A, int n, int k)
+    void kway::KWaySort::KSortAlgo(int* A, int n, int k)
     {
         if (n < k)
         {
-            QuickSort(A, 0, n);
-            return A;
+            QuickSort(A, 0, n - 1);
         }
         else 
         {
-            int size = (n / k);
+            int size;
             int mod_k = (n % k);
+            int mod_size;
+            if (mod_k == 0)
+            {
+                size = (n / k);
+                mod_size = (n / k);
+            }
+            else 
+            {
+                size = (n / k)  + 1;
+                mod_size = n % size;
+            }
             
             for (int i = 0; i < k; i++)
             {
@@ -21,10 +31,10 @@ namespace kway
                     KSortAlgo(A + (i * size), size, k);
                 }
                 else {
-                    KSortAlgo(A + (i * size), mod_k, k);
+                    KSortAlgo(A + (i * size), mod_size, k);
                 }
             }
-            return Merge(A, n, k);
+            Merge(A, n, k);
         }
     }
 
@@ -69,16 +79,34 @@ namespace kway
         *b = temp;
     }
 
-    int* KWaySort::Merge(int* A, int n, int k)
+    void KWaySort::Merge(int* A, int n, int k)
     {
+        int size;
+        int mod_k = (n % k);
+        int mod_size;
+        if (mod_k == 0)
+        {
+            size = (n / k);
+            mod_size = (n / k);
+        }
+        else
+        {
+            size = (n / k) + 1;
+            mod_size = n % size;
+            if (mod_size == 0)
+            {
+                k--;
+            }
+        }
+
         int* output = new int[n];
         Heap::Pair** temp = new Heap::Pair*[k];
 
-        for (int i = 0; i < k; i++)
+        for (int j = 0; j < k; j++)
         {
-            temp[i] = new Heap::Pair();
-            temp[i]->data = A[i * (n / k)];
-            temp[i]->key = i * (n / k);
+            temp[j] = new Heap::Pair();
+            temp[j]->data = A[j * size];
+            temp[j]->key = j * size;
         }
 
         Heap heap(temp, k);
@@ -88,7 +116,7 @@ namespace kway
             pair = heap.DeleteMin();
             output[i] = pair->data;
             Heap::Pair* newPair = new Heap::Pair();
-            if ((pair->key + 1) % (n/k) != 0)
+            if (pair->key + 1 < n && (pair->key + 1) % size != 0)
             {
                 newPair->data = A[pair->key + 1];
                 newPair->key = pair->key + 1;
@@ -96,6 +124,9 @@ namespace kway
             }
         }
 
-        return output;
+        for (int i = 0; i < n; i++)
+        {
+            A[i] = output[i];
+        }
     }
 }

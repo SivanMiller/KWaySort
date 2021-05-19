@@ -136,7 +136,7 @@ namespace kway
 		_heapSize++;
 
 		// Find right place to insert new item
-		while ((i > 0) && (_data[getParent(i)] > item))
+		while ((i > 0) && (_data[getParent(i)]->data > item->data))
 		{
 			_data[i] = _data[getParent(i)];
 			i = getParent(i);

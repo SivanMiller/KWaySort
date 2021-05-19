@@ -24,52 +24,62 @@ int main()
 		cout << "wrong input" << endl;
 		exit(1);
 	}
-	
-	    string currStr;
-	    int i = 0;
-	    while (getline(infile, currStr) && infile.good())
-	    {
-		   if (i == n)
-		   {
-			  cout << "wrong input" << endl;
-			  return -1;
-		   }
 
-		   for (int i = 0; i < currStr.length(); i++) {
-			  if (currStr.at(i) < '0' || currStr.at(i) > '9')
-			  {
-				 cout << "wrong input" << endl;
-				 return -1;
-			  }
-		   }
-		   int len = stoi(currStr);
-		   arr[i] = len;
-		   i++;
-	    }
-	    infile.close();
-	    if (i != n)
-	    {
-		   cout << "wrong input" << endl;
-		   return -1;
-	    }
-	    
-	    int *res =KWaySort::KSortAlgo(arr, n, k);
-	
-	    ofstream outFile;
-	    string outFileName;
-	    cin >> outFileName;
-	    outFile.open(outFileName);
-	    if (!outFile.good())
-	    {
-		   cout << "wrong input" << endl;
-		   return -1;
-	    }
+	string currStr;
+	int counter = 0;
 
-	    for (int i = 0; i < n; i++)
-	    {
-		   outFile << res[i] << endl;
-	    }
+	while (!infile.eof() && infile.good())
+	{
+		getline(infile, currStr);
+		if (counter == n)
+		{
+			cout << "wrong input" << endl;
+			return -1;
+		}
+		
+		if ((currStr.at(0) < '0' || currStr.at(0) > '9') && currStr.at(0) != '-')
+		{
+			cout << "wrong input" << endl;
+			return -1;
+		}
+		else {
+			for (int i = 1; i < currStr.length(); i++) {
+				if (currStr.at(i) < '0' || currStr.at(i) > '9')
+				{
+					cout << "wrong input" << endl;
+						return -1;
+				}
+			}
 
-	    outFile.close();
+			int len = stoi(currStr);
+			arr[counter] = len;
+			counter++;
+		}
+	}
+	infile.close();
+	if (counter != n)
+	{
+		cout << "wrong input" << endl;
+		return -1;
+	}
+
+	KWaySort::KSortAlgo(arr, n, k);
+
+	ofstream outFile;
+	string outFileName;
+	cin >> outFileName;
+	outFile.open(outFileName);
+	if (!outFile.good())
+	{
+		cout << "wrong input" << endl;
+		return -1;
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		outFile << arr[i] << endl;
+	}
+
+	outFile.close();
 
 }
