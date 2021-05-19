@@ -1,11 +1,12 @@
-
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
 #include <string>
 #include "KWaySort.h"
+
 using namespace std;
 using namespace kway;
+
 int main()
 {
 	int n, k;
@@ -81,5 +82,4 @@ int main()
 	}
 
 	outFile.close();
-
 }

@@ -4,7 +4,7 @@ namespace kway
 {
     void kway::KWaySort::KSortAlgo(int* A, int n, int k)
     {
-        if (n < k)
+        if (n < k || k == 1)
         {
             QuickSort(A, 0, n - 1);
         }
