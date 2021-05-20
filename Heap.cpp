@@ -96,7 +96,7 @@ namespace kway
 			FixHeap(min);
 		}
 	}
-
+	
 	Heap::Pair* Heap::GetMin() const
 	{
 		if (_allocated)

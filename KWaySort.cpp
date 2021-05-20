@@ -13,6 +13,7 @@ namespace kway
             int size;
             int mod_k = (n % k);
             int mod_size;
+            //Calculating size of each sub array
             if (mod_k == 0)
             {
                 size = (n / k);
@@ -24,6 +25,7 @@ namespace kway
                 mod_size = n % size;
             }
             
+            //Sorting sub-arrays
             for (int i = 0; i < k; i++)
             {
                 if (i != k - 1)
@@ -34,9 +36,11 @@ namespace kway
                     KSortAlgo(A + (i * size), mod_size, k);
                 }
             }
+            //Merging sub-arays
             Merge(A, n, k);
         }
     }
+
 
     void KWaySort::QuickSort(int* A, int left, int right)
     {
@@ -84,6 +88,8 @@ namespace kway
         int size;
         int mod_k = (n % k);
         int mod_size;
+        
+        //Calculating size of each sub array
         if (mod_k == 0)
         {
             size = (n / k);
@@ -93,40 +99,55 @@ namespace kway
         {
             size = (n / k) + 1;
             mod_size = n % size;
+            
+            //If the last sub-array is size 0, do not go over it
             if (mod_size == 0)
             {
                 k--;
             }
         }
 
+        //Creating sorted output array
         int* output = new int[n];
+        //Creating initial array for heap, with first numbers from each sub-array
         Heap::Pair** temp = new Heap::Pair*[k];
-
         for (int j = 0; j < k; j++)
         {
             temp[j] = new Heap::Pair();
             temp[j]->data = A[j * size];
             temp[j]->key = j * size;
         }
-
+        //Creating heap from initial array- Floyd
         Heap heap(temp, k);
+
         Heap::Pair* pair;
+        //Going over heap, and deleting minimum value, and adding next value from 
+        // the given sub-array
+        Heap::Pair* newPair;
         for (int i = 0; i < n; i++)
         {
             pair = heap.DeleteMin();
             output[i] = pair->data;
-            Heap::Pair* newPair = new Heap::Pair();
+
+            newPair = new Heap::Pair();
+            //If we didn't go over entire sub-array, add the next value
             if (pair->key + 1 < n && (pair->key + 1) % size != 0)
             {
                 newPair->data = A[pair->key + 1];
                 newPair->key = pair->key + 1;
                 heap.Insert(newPair);
             }
+
+            delete pair;
         }
 
+        //Changing A array to sorted output array
         for (int i = 0; i < n; i++)
         {
             A[i] = output[i];
         }
+
+        delete[] output;
+        delete[] temp;
     }
 }
